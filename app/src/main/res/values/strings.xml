@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">FlashCards</string>
+    <string name="welcome">The best flashcards and study tool</string>
+    <string name="des">Join our vAsT pool of users using science-based flashcards to improve your grade and performance</string>
+    <string name="get_started">Get Started</string>
+    <string name="log_in">Log in</string>
+    <string name="sign_up">Sign_up</string>
+</resources>
