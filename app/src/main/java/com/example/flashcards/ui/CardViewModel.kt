@@ -18,6 +18,28 @@ class CardViewModel : ViewModel() {
     val uiState: StateFlow<CardUiState> = _uiState.asStateFlow()
     var currentNumOfList = 0;
 
+    fun checkLogin(currentUserName: String, currentPassword: String) {
+        if (currentUserName != uiState.value.username || currentPassword != uiState.value.password) {
+            _uiState.update { currentState ->
+                currentState.copy(correctLogIn = false)
+            }
+        } else {
+            _uiState.update { currentState ->
+                currentState.copy(correctLogIn = true)
+            }
+        }
+    }
+
+    fun addInfo (currentUserName: String, currentPassword: String) {
+        _uiState.update { currentState ->
+            currentState.copy(username = currentUserName, password = currentPassword)
+        }
+    }
+
+    fun checkUsernameUnique (currentUserName: String): Boolean {
+        return true;
+    }
+
     fun setProfilePicture (@DrawableRes profilePicId: Int) {
         _uiState.update { currentState ->
             currentState.copy(
@@ -65,6 +87,4 @@ class CardViewModel : ViewModel() {
     fun addWordToList () {}
 
     fun removeWordFromList () {}
-
-
 }

@@ -4,16 +4,19 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
-import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.flashcards.R
 
 @Composable
@@ -26,7 +29,7 @@ private fun CommonButton(
         onClick = onClick,
         modifier = modifier.widthIn(min = 250.dp)
     ) {
-        Text(text = stringResource(id = resourceId))
+        Text(text = stringResource(id = resourceId), style = TextStyle(textAlign = TextAlign.Center))
     }
 }
 
@@ -37,7 +40,7 @@ fun PreLoginHome (
     modifier: Modifier = Modifier
 ) {
     Box (
-        modifier = modifier
+        modifier = modifier.fillMaxSize()
     ) {
         Image(
             painter = painterResource(id = R.drawable.shinobu_sword),
@@ -46,21 +49,53 @@ fun PreLoginHome (
             modifier = Modifier.fillMaxSize()
         )
         Column (
-                ) {
-            Row () {
-            }
-            Column(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Row (
                 modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
             ) {
-                Text(text = stringResource(id = R.string.welcome))
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(text = stringResource(id = R.string.des))
-                Spacer(modifier = Modifier.height(8.dp))
-                CommonButton(resourceId = R.string.get_started, onClick = onLoginButtonClicked)
+                Spacer(modifier = Modifier.width(200.dp))
+                CommonButton(
+                    resourceId = R.string.register,
+                    onClick = onRegisterButtonClicked,
+                    modifier = modifier.weight(1f)
+                )
+                Spacer(modifier = Modifier.width(24.dp))
+                CommonButton(
+                    resourceId = R.string.log_in,
+                    onClick = onLoginButtonClicked,
+                    modifier = modifier.weight(1f)
+                )
+            }
+            Box (
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.welcome),
+                        fontSize = 40.sp,
+                        style = TextStyle(textAlign = TextAlign.Center)
+                    )
+                    Spacer(modifier = Modifier.height(30.dp))
+                    Text(
+                        text = stringResource(id = R.string.des),
+                        fontSize = 24.sp,
+                        style = TextStyle(textAlign = TextAlign.Justify)
+                    )
+                    Spacer(modifier = Modifier.height(24.dp))
+                    CommonButton(resourceId = R.string.get_started, onClick = onLoginButtonClicked)
+                }
             }
         }
     }

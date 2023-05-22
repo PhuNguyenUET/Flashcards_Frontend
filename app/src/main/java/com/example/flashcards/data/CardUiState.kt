@@ -8,6 +8,7 @@ data class CardUiState (
     val password: String = "2007356",
     val name: String = "SkyLawson",
     val numOfList: Int = 0,
-    val profilePicId: Int = R.drawable.profile_pic_1,
-    val numOfCardsInList: List<Int> = mutableListOf()
+    val profilePicId: Int = R.drawable.profile_photo_1,
+    val numOfCardsInList: List<Int> = mutableListOf(),
+    val correctLogIn: Boolean = true
 )

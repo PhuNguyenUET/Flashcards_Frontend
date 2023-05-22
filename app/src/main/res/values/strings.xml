@@ -1,8 +1,16 @@
 <resources>
     <string name="app_name">FlashCards</string>
     <string name="welcome">The best flashcards and study tool</string>
-    <string name="des">Join our vAsT pool of users using science-based flashcards to improve your grade and performance</string>
+    <string name="des">Join our vast pool of users using science based flashcard to improve your grade and performance</string>
     <string name="get_started">Get Started</string>
     <string name="log_in">Log in</string>
-    <string name="sign_up">Sign_up</string>
+    <string name="register">Sign up</string>
+    <string name="username">Username</string>
+    <string name="password">Password </string>
+    <string name="question">Not a member?</string>
+    <string name="wrong_info">Wrong information</string>
+    <string name="wrong_info_noti">Wrong username or password</string>
+    <string name="confirm">Confirm</string>
+    <string name="do_not_match_noti">Your password confirm does not match</string>
+    <string name="username_exist">This username has already existed</string>
 </resources>
