@@ -1,23 +1,40 @@
 package com.example.flashcards.ui.components
 
+import androidx.annotation.DrawableRes
+import com.example.flashcards.R
+
 class CardList () {
     private var numOfWords = 0
-    private var words = mutableListOf<Card>()
+    private var words = mutableListOf<FlashCard>()
     var title = ""
     var description = ""
-    fun addCard (card: Card) {
-        words.add(card)
+    @DrawableRes
+    var photoId: Int = R.drawable.profile_photo_1
+    var isStarred: Boolean = false
+    fun addCard (flashCard: FlashCard) {
+        words.add(flashCard)
         numOfWords ++
     }
-    fun removeCard (card: Card) {
-        words.remove(card)
+    fun removeCard (flashCard: FlashCard) {
+        words.remove(flashCard)
         numOfWords --
     }
     fun removeAtIdx (idx: Int) {
         words.removeAt(idx)
         numOfWords --
     }
-    constructor (words: List<Card>): this() {
+
+    fun setStar () {
+        isStarred = !isStarred
+    }
+
+    public constructor (title: String,
+                 description: String,
+                 @DrawableRes photoId: Int,
+                 words: List<FlashCard>): this() {
+        this.title = title
+        this.description = description
+        this.photoId = photoId
         this.words = words.toMutableList()
     }
 }

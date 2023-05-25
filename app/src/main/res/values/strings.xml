@@ -13,4 +13,19 @@
     <string name="confirm">Confirm</string>
     <string name="do_not_match_noti">Your password confirm does not match</string>
     <string name="username_exist">This username has already existed</string>
+    <string name="star">Starred</string>
+    <string name="not_starred">Not starred</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="share">Share</string>
+    <string name="created_by">Created by %s</string>
+    <string name="menu">Menu</string>
+    <string name="add">Add</string>
+    <string name="expand">Expand</string>
+    <string name="welcome_user">Welcome, %s</string>
+    <string name="recent">Recent</string>
+    <string name="discovery">Discovery</string>
+    <string name="achievement">Achievements</string>
+    <string name="no_achievement">You currently have no achievements to display</string>
+    <string name="add_more">Add more</string>
 </resources>
