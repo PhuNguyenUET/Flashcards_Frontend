@@ -14,6 +14,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
@@ -42,8 +44,8 @@ fun FlipCard(
 
     Card(
         Modifier
-            .width(330.dp)
-            .height(230.dp)
+            .width(300.dp)
+            .height(220.dp)
             .graphicsLayer {
                 rotationX = rotation
                 cameraDistance = 8 * density
@@ -61,12 +63,13 @@ fun FlipCard(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text(text = if (rotated) flashCard.word else flashCard.definition,
+            Text(text = if (rotated) flashCard.definition else flashCard.word,
                 modifier = Modifier
                     .graphicsLayer {
                         alpha = if (rotated) animateBack else animateFront
                         rotationX = rotation
-                    }
+                    },
+                textAlign = TextAlign.Center
             )
         }
     }

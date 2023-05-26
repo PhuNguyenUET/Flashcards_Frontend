@@ -1,2 +1,111 @@
 package com.example.flashcards.ui
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.flashcards.R
+
+@Composable
+fun ProfileScreen (
+    onPhotoClicked: () -> Unit,
+    onCardListClicked: () -> Unit,
+    onSettingsClicked: () -> Unit,
+    modifier: Modifier = Modifier,
+    cardViewModel: CardViewModel = viewModel()
+) {
+    val cardUiState by cardViewModel.uiState.collectAsState()
+    Box (
+        modifier = modifier.fillMaxSize()
+    ) {
+        Image(painter = painterResource(id = R.drawable.yukki_chan),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Spacer(modifier = Modifier.height(50.dp))
+            Image(
+                painter = painterResource(id = cardUiState.profilePicId),
+                contentDescription = stringResource(id = R.string.profile_picture),
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .width(90.dp)
+                    .height(90.dp)
+                    .clip(shape = RoundedCornerShape(50.dp))
+                    .clickable(onClick = onPhotoClicked)
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(text = cardUiState.name, style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 24.sp))
+            Spacer(modifier = Modifier.height(20.dp))
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .height(50.dp)
+                        .fillMaxWidth()
+                        .clickable(onClick = onCardListClicked)
+                        .border(border = BorderStroke(1.dp, Color.LightGray))
+                ) {
+                    Icon(imageVector = Icons.Filled.Book, contentDescription = stringResource(id = R.string.your_lists))
+                    Spacer(modifier = Modifier.width(15.dp))
+                    Text (text = stringResource(id = R.string.your_lists), style = TextStyle(fontSize = 20.sp))
+                    Spacer(Modifier.weight(1f))
+                    Icon(imageVector = Icons.Filled.ArrowRight, contentDescription = null)
+                }
+                Spacer(modifier = Modifier.height(20.dp))
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .height(50.dp)
+                        .fillMaxWidth()
+                        .clickable(onClick = onCardListClicked)
+                        .border(border = BorderStroke(1.dp, Color.LightGray))
+                ) {
+                    Icon(imageVector = Icons.Filled.Settings, contentDescription = stringResource(id = R.string.your_settings))
+                    Spacer(modifier = Modifier.width(15.dp))
+                    Text (text = stringResource(id = R.string.your_settings), style = TextStyle(fontSize = 20.sp))
+                    Spacer(Modifier.weight(1f))
+                    Icon(imageVector = Icons.Filled.ArrowRight, contentDescription = null)
+                }
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ProfilePreview () {
+    ProfileScreen(
+        onPhotoClicked = { /*TODO*/ },
+        onCardListClicked = { /*TODO*/ },
+        onSettingsClicked = { /*TODO*/ })
+}

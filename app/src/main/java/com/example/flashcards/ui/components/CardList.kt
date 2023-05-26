@@ -5,7 +5,8 @@ import com.example.flashcards.R
 
 class CardList () {
     private var numOfWords = 0
-    private var words = mutableListOf<FlashCard>()
+    var words = mutableListOf<FlashCard>()
+    private set
     var title = ""
     var description = ""
     @DrawableRes
