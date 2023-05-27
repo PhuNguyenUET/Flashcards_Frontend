@@ -115,8 +115,8 @@ fun LoginScreen (
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     InfoField(
-                        nameId = R.string.username,
-                        labelId = R.string.username,
+                        name = stringResource(id = R.string.username),
+                        label = stringResource(id = R.string.username),
                         value = currentUsername,
                         onValueChange = { currentUsername = it },
                         keyboardOptions = KeyboardOptions.Default.copy(

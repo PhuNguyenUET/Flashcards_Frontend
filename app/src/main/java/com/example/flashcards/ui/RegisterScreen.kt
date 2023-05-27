@@ -119,8 +119,8 @@ fun RegisterScreen (
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     InfoField(
-                        nameId = com.example.flashcards.R.string.username,
-                        labelId = com.example.flashcards.R.string.username,
+                        name = stringResource(id = com.example.flashcards.R.string.username),
+                        label = stringResource(id = com.example.flashcards.R.string.username),
                         value = currentUsername,
                         onValueChange = { currentUsername = it },
                         keyboardOptions = KeyboardOptions.Default.copy(

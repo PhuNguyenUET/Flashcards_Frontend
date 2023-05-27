@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -19,24 +20,26 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun InfoField (
-    @StringRes nameId: Int,
-    @StringRes labelId: Int,
+    name: String,
+    label: String,
     value: String,
     onValueChange: (String) -> Unit,
     keyboardOptions: KeyboardOptions,
     keyboardActions: KeyboardActions,
     wrongInfo: Boolean,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    fontSize: Int = 24
 ) {
     Row(
+        verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
     ) {
-        Text (text = stringResource(id = nameId), style = TextStyle(fontSize = 24.sp))
+        Text (text = name, style = TextStyle(fontSize = fontSize.sp))
         Spacer(modifier = Modifier.width(12.dp))
         TextField(
             value = value,
             onValueChange = onValueChange,
-            label = {Text(stringResource(id = labelId))},
+            label = {Text(label)},
             isError = wrongInfo,
             modifier = modifier.fillMaxWidth(),
             singleLine = true,
@@ -57,12 +60,14 @@ fun PassField (
     keyboardActions: KeyboardActions,
     wrongInfo: Boolean,
     passwordVisible: Boolean,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    fontSize: Int = 24
 ) {
     Row(
+        verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
     ) {
-        Text (text = name, style = TextStyle(fontSize = 24.sp))
+        Text (text = name, style = TextStyle(fontSize = fontSize.sp))
         Spacer(modifier = Modifier.width(12.dp))
         TextField(
             value = value,

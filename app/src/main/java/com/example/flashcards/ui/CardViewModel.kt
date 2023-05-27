@@ -40,6 +40,13 @@ class CardViewModel : ViewModel() {
         return true;
     }
 
+    fun changeTheme () {
+        val tempTheme = _uiState.value.lightTheme
+        _uiState.update { currentState ->
+            currentState.copy(lightTheme = !tempTheme)
+        }
+    }
+
     fun setProfilePicture (@DrawableRes profilePicId: Int) {
         _uiState.update { currentState ->
             currentState.copy(
