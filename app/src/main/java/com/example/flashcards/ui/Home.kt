@@ -32,13 +32,11 @@ import com.example.flashcards.ui.components.ListShort
 fun Home (
     onCardClicked: () -> Unit,
     onEditClicked: () -> Unit,
-    onDeleteClicked: () -> Unit,
     onShareClicked: () -> Unit,
-    onCopyClicked: () -> Unit,
     cardLists: List<CardList>,
     discoveryLists: List<CardList>,
-    cardViewModel: CardViewModel = viewModel(),
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    cardViewModel: CardViewModel
 ) {
     val cardUiState by cardViewModel.uiState.collectAsState()
     Box (
@@ -58,7 +56,7 @@ fun Home (
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Center
         ) {
-            Spacer(modifier = Modifier.height(60.dp))
+            Spacer(modifier = Modifier.height(5.dp))
             Text(
                 text = stringResource(id = R.string.achievement),
                 style = TextStyle(
@@ -93,17 +91,16 @@ fun Home (
                 )
             )
             val list = cardLists.takeLast(3)
-            for (item in list) {
+            for ((idx, item) in list.withIndex()) {
                 ListShort(
                     name = cardUiState.username,
                     photoId = item.photoId,
-                    listName = item.title,
-                    isStarred = item.isStarred,
+                    cardList = item,
+                    idx = cardLists.size - list.size + idx,
                     onCardClicked = onCardClicked,
                     onEditClicked = onEditClicked,
-                    onDeleteClicked = onDeleteClicked,
-                    onStarredClicked = onDeleteClicked,
-                    onShareClicked = onShareClicked
+                    onShareClicked = onShareClicked,
+                    cardViewModel = cardViewModel
                 )
             }
             Text(
@@ -121,7 +118,9 @@ fun Home (
                     photoId = item.photoId,
                     listName = item.title,
                     onCardClicked = onCardClicked,
-                    onAddClicked = onCopyClicked,
+                    onAddClicked = {
+                        cardViewModel.addList(item)
+                                   },
                     onShareClicked = onShareClicked
                 )
             }
@@ -138,10 +137,9 @@ fun HomePreview () {
     Home(
         onCardClicked = { /*TODO*/ },
         onEditClicked = { /*TODO*/ },
-        onDeleteClicked = { /*TODO*/ },
         onShareClicked = { /*TODO*/ },
-        onCopyClicked = { },
         cardLists = cardLists,
-        discoveryLists = cardLists
+        discoveryLists = cardLists,
+        cardViewModel = viewModel()
     )
 }

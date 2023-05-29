@@ -41,7 +41,7 @@ fun LoginScreen (
     onSiteChanged: () -> Unit,
     onLoginClicked: () -> Unit,
     modifier: Modifier = Modifier,
-    cardViewModel: CardViewModel = viewModel()
+    cardViewModel: CardViewModel
 ) {
     val cardUiState by cardViewModel.uiState.collectAsState()
     val focusManager = LocalFocusManager.current
@@ -53,7 +53,9 @@ fun LoginScreen (
     val interactionSourceButton: MutableInteractionSource = remember { MutableInteractionSource() }
     val isButtonPressed by interactionSourceButton.collectIsPressedAsState()
     val nextAction: () -> Unit = if (cardUiState.correctLogIn) {
-        onLoginClicked
+    {
+        onLoginClicked()
+        cardViewModel.login() }
     } else {
         {}
     }
@@ -197,5 +199,5 @@ fun LoginScreen (
 @Preview(showBackground = true)
 @Composable
 fun LoginScreenDefaultPreview () {
-    LoginScreen(onSiteChanged = { /*TODO*/ }, onLoginClicked = { /*TODO*/ })
+    LoginScreen(onSiteChanged = { /*TODO*/ }, onLoginClicked = { /*TODO*/ }, cardViewModel = viewModel())
 }

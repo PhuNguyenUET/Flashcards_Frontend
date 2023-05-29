@@ -33,14 +33,19 @@ import com.example.flashcards.ui.components.ListShort
 fun YourListScreen (
     onCardClicked: () -> Unit,
     onEditClicked: () -> Unit,
-    onDeleteClicked: () -> Unit,
     onShareClicked: () -> Unit,
     onAddMoreClicked: () -> Unit,
     cardLists: List<CardList>,
-    cardViewModel: CardViewModel = viewModel(),
+    cardViewModel: CardViewModel,
     modifier: Modifier = Modifier
 ) {
     val cardUiState by cardViewModel.uiState.collectAsState()
+    val onAdd = {
+        onAddMoreClicked()
+        val list = CardList()
+        cardViewModel.addList(list)
+        cardViewModel.updateIdx(cardLists.size - 1)
+    }
     Box (
         contentAlignment = Alignment.TopCenter,
         modifier = modifier
@@ -74,17 +79,16 @@ fun YourListScreen (
                     .weight(weight = 1f, fill = false),
                 verticalArrangement = Arrangement.Center
             ) {
-                for (item in cardLists) {
+                for ((idx, item) in cardLists.withIndex()) {
                     ListShort(
                         name = cardUiState.username,
                         photoId = item.photoId,
-                        listName = item.title,
-                        isStarred = item.isStarred,
+                        cardList = item,
+                        idx = idx,
                         onCardClicked = onCardClicked,
                         onEditClicked = onEditClicked,
-                        onDeleteClicked = onDeleteClicked,
-                        onStarredClicked = onDeleteClicked,
-                        onShareClicked = onShareClicked
+                        onShareClicked = onShareClicked,
+                        cardViewModel = cardViewModel
                     )
                 }
             }
@@ -93,7 +97,7 @@ fun YourListScreen (
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Button(onClick = onAddMoreClicked) {
+                Button(onClick = onAdd) {
                     Row (
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
@@ -120,9 +124,9 @@ fun YourListPreview () {
     YourListScreen(
         onCardClicked = { /*TODO*/ },
         onEditClicked = { /*TODO*/ },
-        onDeleteClicked = { /*TODO*/ },
         onShareClicked = { /*TODO*/ },
         onAddMoreClicked = { },
-        cardLists = cardLists
+        cardLists = cardLists,
+        cardViewModel = viewModel()
     )
 }

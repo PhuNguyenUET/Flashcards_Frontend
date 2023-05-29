@@ -1,16 +1,20 @@
 package com.example.flashcards.ui
 
-import android.widget.Space
+import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Card
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -31,15 +35,46 @@ import com.example.flashcards.ui.components.CardList
 import com.example.flashcards.ui.components.FlashCard
 
 @Composable
+fun PlusButton (
+    size: Int,
+    onAddClicked: () -> Unit
+) {
+    IconButton(
+        onClick = onAddClicked,
+        modifier = Modifier
+            .border(
+                BorderStroke(1.dp, Color.LightGray),
+                shape = RoundedCornerShape(size.dp)
+            )
+            .background(color = Color.Blue, shape = CircleShape)
+            .clip(CircleShape)
+    )  {
+        Icon(
+            imageVector = Icons.Filled.Add,
+            contentDescription = stringResource(id = R.string.add),
+            tint = Color.White
+        )
+    }
+}
+
+@Composable
 fun AddMoreScreen (
     cardList: CardList,
+    idx: Int,
     onDoneClicked: () -> Unit,
     modifier: Modifier = Modifier,
-    cardViewModel: CardViewModel = viewModel()
+    cardViewModel: CardViewModel
 ) {
-    val tempCardList by remember { mutableStateOf(cardList) }
-    val cardUiState by cardViewModel.uiState.collectAsState()
+    var tempList = cardList.words
+    var key by remember { mutableStateOf(0) }
+    var title by remember { mutableStateOf(cardList.title) }
+    var description by remember { mutableStateOf(cardList.description) }
     val focusManager = LocalFocusManager.current
+    val onAdd: () -> Unit = {
+        val card = FlashCard()
+        tempList.add(card)
+        key ++
+    }
     Box(modifier = modifier.fillMaxSize()) {
         Image(
             painter = painterResource(id = R.drawable.yukki_chan),
@@ -62,15 +97,23 @@ fun AddMoreScreen (
                 Text(
                     text = stringResource(id = R.string.done),
                     style = TextStyle(fontStyle = FontStyle.Italic, fontSize = 18.sp),
-                    modifier = Modifier.clickable(onClick = onDoneClicked)
+                    modifier = Modifier.clickable {
+                        cardViewModel.changeList(
+                            words = tempList,
+                            idx = idx,
+                            title = title,
+                            description = description
+                        )
+                        onDoneClicked()
+                    }
                 )
                 Spacer(modifier = Modifier.width(4.dp))
             }
             Spacer(modifier = Modifier.height(10.dp))
             CommonTextField(
                 labelId = R.string.title,
-                onValueChange = { tempCardList.title = it },
-                value = tempCardList.title,
+                onValueChange = { title = it },
+                value = title,
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Next
@@ -82,8 +125,8 @@ fun AddMoreScreen (
             Spacer(modifier = Modifier.height(4.dp))
             CommonTextField(
                 labelId = R.string.description,
-                onValueChange = { tempCardList.description = it },
-                value = tempCardList.description,
+                onValueChange = { description = it },
+                value = description,
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Done
@@ -93,10 +136,18 @@ fun AddMoreScreen (
                 )
             )
             Spacer(modifier = Modifier.height(10.dp))
-            Text(
-                text = stringResource(id = R.string.words_in_list),
-                style = TextStyle(fontWeight = FontWeight.SemiBold, fontSize = 25.sp)
-            )
+            Row (
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = stringResource(id = R.string.words_in_list),
+                    style = TextStyle(fontWeight = FontWeight.SemiBold, fontSize = 25.sp)
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                PlusButton(size = 20, onAddClicked = onAdd)
+                Spacer(modifier = Modifier.width(4.dp))
+            }
             Spacer(modifier = Modifier.height(10.dp))
             Column(
                 modifier = Modifier
@@ -105,9 +156,22 @@ fun AddMoreScreen (
                     .verticalScroll(rememberScrollState())
                     .weight(weight = 1f, fill = false)
             ) {
-                for (card in tempCardList.words) {
-                    CardBox(card = card, onTermChange = {card.word = it}, onDefChange = { card.definition = it})
+                for (card in tempList) {
+                    CardBox(card = card, onTermChange = {card.word = it; key --}, onDefChange = { card.definition = it; key ++})
                     Spacer(modifier = Modifier.height(10.dp))
+                }
+                Button(onClick = onAdd) {
+                    Row (
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(imageVector = Icons.Filled.Add, contentDescription = stringResource(id = R.string.add))
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(
+                            text = stringResource(id = R.string.add_more),
+                            style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 15.sp)
+                        )
+                    }
                 }
             }
         }
@@ -192,5 +256,5 @@ fun AddMorePreview () {
         photoId = R.drawable.profile_photo_1,
         words = cards
     )
-    AddMoreScreen(cardList = cardList, onDoneClicked = { /*TODO*/ })
+    AddMoreScreen(cardList = cardList, idx = 1, onDoneClicked = {}, cardViewModel = viewModel())
 }

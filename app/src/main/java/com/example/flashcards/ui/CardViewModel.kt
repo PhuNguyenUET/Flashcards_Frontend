@@ -1,22 +1,18 @@
 package com.example.flashcards.ui
 
 import androidx.annotation.DrawableRes
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.flashcards.data.CardUiState
 import com.example.flashcards.ui.components.CardList
+import com.example.flashcards.ui.components.FlashCard
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class CardViewModel : ViewModel() {
-    val lists = mutableListOf<CardList>()
     private val _uiState = MutableStateFlow(CardUiState())
     val uiState: StateFlow<CardUiState> = _uiState.asStateFlow()
-    var currentNumOfList = 0;
 
     fun checkLogin(currentUserName: String, currentPassword: String) {
         if (currentUserName != uiState.value.username || currentPassword != uiState.value.password) {
@@ -30,14 +26,25 @@ class CardViewModel : ViewModel() {
         }
     }
 
-    fun addInfo (currentUserName: String, currentPassword: String) {
+    fun changeList (idx: Int, words: List<FlashCard>, title: String, description: String) {
+        var tempList: MutableList<CardList> = _uiState.value.lists
+        val newList = CardList(words = words, description = description, title = title, photoId = tempList[idx].photoId)
+        tempList[idx] = newList
         _uiState.update { currentState ->
-            currentState.copy(username = currentUserName, password = currentPassword)
+            currentState.copy(lists = tempList)
+        }
+    }
+
+    fun changeStar(idx: Int) {
+        var tempList: MutableList<CardList> = _uiState.value.lists
+        tempList[idx].setStar()
+        _uiState.update { currentState ->
+            currentState.copy(lists = tempList)
         }
     }
 
     fun checkUsernameUnique (currentUserName: String): Boolean {
-        return true;
+        return true
     }
 
     fun changeTheme () {
@@ -48,9 +55,22 @@ class CardViewModel : ViewModel() {
     }
 
     fun setProfilePicture (@DrawableRes profilePicId: Int) {
+        var tempList: MutableList<CardList> = _uiState.value.lists
+        for (list in tempList) {
+            list.changeId(profilePicId)
+        }
         _uiState.update { currentState ->
             currentState.copy(
-                profilePicId = profilePicId
+                profilePicId = profilePicId,
+                lists = tempList
+            )
+        }
+    }
+
+    fun login() {
+        _uiState.update {currentState ->
+            currentState.copy(
+                login = true
             )
         }
     }
@@ -72,26 +92,48 @@ class CardViewModel : ViewModel() {
     }
 
     fun addList (cardList: CardList) {
-        lists.add(cardList)
-        currentNumOfList ++
+        var tempList: MutableList<CardList> = _uiState.value.lists
+        tempList.add(cardList)
         _uiState.update { currentState ->
             currentState.copy(
-                numOfList = currentNumOfList
+                lists = tempList
             )
         }
     }
 
     fun removeList (cardList: CardList) {
-        lists.remove(cardList)
-        currentNumOfList --
+        var tempList: MutableList<CardList> = _uiState.value.lists
+        tempList.remove(cardList)
         _uiState.update { currentState ->
             currentState.copy(
-                numOfList = currentNumOfList
+                lists = tempList
             )
         }
     }
 
-    fun addWordToList () {}
+    fun removeListByIdx (idx: Int) {
+        var tempList: MutableList<CardList> = _uiState.value.lists
+        tempList.removeAt(idx)
+        _uiState.update { currentState ->
+            currentState.copy(
+                lists = tempList
+            )
+        }
+    }
 
-    fun removeWordFromList () {}
+    fun logOut () {
+        _uiState.update { currentState ->
+            currentState.copy(
+                login = false
+            )
+        }
+    }
+
+    fun updateIdx (idx: Int) {
+        _uiState.update { currentState ->
+            currentState.copy(
+                idx = idx
+            )
+        }
+    }
 }

@@ -34,7 +34,7 @@ fun ProfileScreen (
     onCardListClicked: () -> Unit,
     onSettingsClicked: () -> Unit,
     modifier: Modifier = Modifier,
-    cardViewModel: CardViewModel = viewModel()
+    cardViewModel: CardViewModel
 ) {
     val cardUiState by cardViewModel.uiState.collectAsState()
     Box (
@@ -87,7 +87,7 @@ fun ProfileScreen (
                     modifier = Modifier
                         .height(50.dp)
                         .fillMaxWidth()
-                        .clickable(onClick = onCardListClicked)
+                        .clickable(onClick = onSettingsClicked)
                         .border(border = BorderStroke(1.dp, Color.LightGray))
                 ) {
                     Icon(imageVector = Icons.Filled.Settings, contentDescription = stringResource(id = R.string.your_settings))
@@ -107,5 +107,6 @@ fun ProfilePreview () {
     ProfileScreen(
         onPhotoClicked = { /*TODO*/ },
         onCardListClicked = { /*TODO*/ },
-        onSettingsClicked = { /*TODO*/ })
+        onSettingsClicked = { /*TODO*/ },
+        cardViewModel = viewModel())
 }

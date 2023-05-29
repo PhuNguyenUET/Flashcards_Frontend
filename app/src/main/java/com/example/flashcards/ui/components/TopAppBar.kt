@@ -1,4 +1,4 @@
-package com.example.flashcards.ui.theme
+package com.example.flashcards.ui.components
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.*
@@ -7,7 +7,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
@@ -20,16 +19,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.flashcards.R
 
 @Composable
-fun topAppBar (
+fun TopAppBar (
     @DrawableRes profileId: Int,
     onMenuClicked: () -> Unit,
     onAddClicked: () -> Unit,
@@ -37,7 +32,8 @@ fun topAppBar (
     modifier: Modifier = Modifier
 ) {
     Row (
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth()
+            .background(color = Color(189, 145, 189, 255)),
         verticalAlignment = Alignment.CenterVertically
     ){
         IconButton(
@@ -87,8 +83,8 @@ fun topAppBar (
 
 @Preview(showBackground = true)
 @Composable
-fun topBarPreview () {
-    topAppBar(
+fun TopBarPreview () {
+    TopAppBar(
         onMenuClicked = { /*TODO*/ },
         onAddClicked = { /*TODO*/ },
         onProfileClicked = { /*TODO*/ },

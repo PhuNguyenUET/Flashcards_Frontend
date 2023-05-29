@@ -3,14 +3,12 @@ package com.example.flashcards.ui.components
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.runtime.*
@@ -26,18 +24,22 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.flashcards.R
+import com.example.flashcards.ui.CardViewModel
 
 @Composable
 fun CardShort (
     flashCard: FlashCard,
-    onEditClicked: () -> Unit,
-    modifier: Modifier = Modifier
+    idx: Int,
+    modifier: Modifier = Modifier,
+    cardViewModel: CardViewModel
 ) {
+    val cardUiState by cardViewModel.uiState.collectAsState()
     var isStarred by remember { mutableStateOf(flashCard.isStarred) }
     Row (
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .border(BorderStroke(1.dp, Color.Black))
             .clip(shape = RoundedCornerShape(20.dp))
@@ -80,8 +82,10 @@ fun CardShort (
         }) {
             Icon(imageVector = starImage, contentDescription = msg, tint = tint)
         }
-        IconButton(onClick = onEditClicked) {
-            Icon(imageVector = Icons.Filled.Edit, contentDescription = stringResource(id = R.string.edit))
+        IconButton(onClick = {
+            cardUiState.lists[cardUiState.idx].removeAtIdx(idx)
+        }) {
+            Icon(imageVector = Icons.Filled.Delete, contentDescription = stringResource(id = R.string.edit))
         }
     }
 }
@@ -92,6 +96,7 @@ fun CardShortPreview () {
     val card = FlashCard(word = "test", definition = "Ảo ma canada mafia Argentina Malaysia California Australia Austria Venezuela Romania Lazada Sri Lanka Sakura Haibara Edogawa Conan Naruto Nami Roronoa Zoro Sạnji Kaido Shanks nhảy lambada chachacha Chaien đấm Nobita và làm Shizuka nhòe đi Mascara khi nghe Vascara.")
     CardShort(
         flashCard = card,
-        onEditClicked = { /*TODO*/ }
+        cardViewModel = viewModel(),
+        idx = 0
     )
 }

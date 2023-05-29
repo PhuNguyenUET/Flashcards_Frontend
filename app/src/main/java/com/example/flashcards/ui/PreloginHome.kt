@@ -27,7 +27,7 @@ private fun CommonButton(
 ) {
     Button (
         onClick = onClick,
-        modifier = modifier.widthIn(min = 250.dp)
+        modifier = modifier
     ) {
         Text(text = stringResource(id = resourceId), style = TextStyle(textAlign = TextAlign.Center))
     }
@@ -62,13 +62,13 @@ fun PreLoginHome (
                 CommonButton(
                     resourceId = R.string.register,
                     onClick = onRegisterButtonClicked,
-                    modifier = modifier.weight(1f)
+                    modifier = Modifier.width(80.dp)
                 )
                 Spacer(modifier = Modifier.width(24.dp))
                 CommonButton(
                     resourceId = R.string.log_in,
                     onClick = onLoginButtonClicked,
-                    modifier = modifier.weight(1f)
+                    modifier = Modifier.width(70.dp)
                 )
             }
             Box (
@@ -94,7 +94,7 @@ fun PreLoginHome (
                         style = TextStyle(textAlign = TextAlign.Justify)
                     )
                     Spacer(modifier = Modifier.height(24.dp))
-                    CommonButton(resourceId = R.string.get_started, onClick = onLoginButtonClicked)
+                    CommonButton(resourceId = R.string.get_started, onClick = onLoginButtonClicked, modifier = Modifier.width(300.dp))
                 }
             }
         }

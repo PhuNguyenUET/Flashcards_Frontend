@@ -33,22 +33,22 @@ fun SettingsScreen (
     onUsernameChangeClicked: () -> Unit,
     onPasswordChangeClicked: () -> Unit,
     modifier: Modifier = Modifier,
-    cardViewModel: CardViewModel = viewModel()
+    cardViewModel: CardViewModel
 ) {
     val cardUiState by cardViewModel.uiState.collectAsState()
     val n = cardUiState.username.length
-    var shown: String = ""
+    var shown = ""
     shown += cardUiState.username[0]
     shown += cardUiState.username[1]
     for (i in 1..(n - 2)) {
         shown += '*'
     }
-    var passShown: String = ""
+    var passShown = ""
     for (i in 1..(n)) {
         passShown += '*'
     }
     Box (
-        modifier = Modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize()
     ) {
         Image(
             painter = painterResource(id = R.drawable.yukki_chan),
@@ -174,7 +174,7 @@ fun SettingsScreen (
                         style = TextStyle(fontSize = 22.sp)
                     )
                     Spacer(modifier = Modifier.width(10.dp))
-                    ChangeButton(onClick = onUsernameChangeClicked)
+                    ChangeButton(onClick = onPasswordChangeClicked)
                 }
             }
         }
@@ -190,12 +190,12 @@ fun ChangeButton (
         text = stringResource(id = R.string.change),
         color = Color.Blue,
         style = TextStyle(fontWeight = FontWeight.SemiBold, fontStyle = FontStyle.Italic, fontSize = 22.sp),
-        modifier = Modifier.clickable(onClick = onClick)
+        modifier = modifier.clickable(onClick = onClick)
     )
 }
 
 @Preview (showBackground = true)
 @Composable
 fun SettingsPreview () {
-    SettingsScreen(onUsernameChangeClicked = { /*TODO*/ }, onPasswordChangeClicked = { /*TODO*/ })
+    SettingsScreen(onUsernameChangeClicked = { /*TODO*/ }, onPasswordChangeClicked = { /*TODO*/ }, cardViewModel = viewModel())
 }

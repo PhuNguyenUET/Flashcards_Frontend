@@ -1,6 +1,5 @@
 package com.example.flashcards.ui
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -37,7 +36,7 @@ import com.example.flashcards.ui.components.InfoField
 fun ChangeUsername (
     onChangeClicked: () -> Unit,
     modifier: Modifier = Modifier,
-    cardViewModel: CardViewModel = viewModel()
+    cardViewModel: CardViewModel
 ) {
     val cardUiState by cardViewModel.uiState.collectAsState()
     val focusManager = LocalFocusManager.current
@@ -55,7 +54,8 @@ fun ChangeUsername (
         }
     }
     val nextAction: () -> Unit = if (check && checkEmpty) {
-        onChangeClicked
+        { onChangeClicked()
+        cardViewModel.setUsername(username = currentNewUserName) }
     } else {
         {}
     }
@@ -149,5 +149,5 @@ fun ChangeUsername (
 @Preview (showBackground = true)
 @Composable
 fun ChangeUsernamePreview () {
-    ChangeUsername(onChangeClicked = { /*TODO*/ })
+    ChangeUsername(onChangeClicked = { /*TODO*/ }, cardViewModel = viewModel())
 }

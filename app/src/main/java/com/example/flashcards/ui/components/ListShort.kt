@@ -1,7 +1,6 @@
 package com.example.flashcards.ui.components
 
 import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -30,20 +29,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.flashcards.R
+import com.example.flashcards.ui.CardViewModel
 
 @Composable
 fun ListShort (
     name: String,
+    cardList: CardList,
+    idx: Int,
     @DrawableRes photoId: Int,
-    listName: String,
-    isStarred: Boolean,
     onCardClicked: () -> Unit,
     onEditClicked: () -> Unit,
-    onDeleteClicked: () -> Unit,
-    onStarredClicked: () -> Unit,
     onShareClicked: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    cardViewModel: CardViewModel
 ) {
     Row (
         modifier = modifier.fillMaxWidth(),
@@ -51,7 +51,12 @@ fun ListShort (
     ) {
         Spacer (Modifier.width(32.dp))
         Row(
-            modifier = Modifier.clickable(onClick = onCardClicked),
+            modifier = Modifier.clickable(
+                onClick = {
+                    onCardClicked()
+                    cardViewModel.updateIdx(idx = idx)
+                }
+            ),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Image(
@@ -66,7 +71,7 @@ fun ListShort (
             Spacer(modifier = Modifier.width(12.dp))
             Column {
                 Text(
-                    text = listName,
+                    text = cardList.title,
                     style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp)
                 )
                 Text(
@@ -84,7 +89,7 @@ fun ListShort (
             val starImage: ImageVector
             val msg: String
             val tint: Color
-            if (isStarred) {
+            if (cardList.isStarred) {
                 starImage = Icons.Filled.Star
                 msg = stringResource(id = R.string.star)
                 tint = Color.Yellow
@@ -93,13 +98,24 @@ fun ListShort (
                 msg = stringResource(id = R.string.star)
                 tint = Color.Black
             }
-            IconButton(onClick = onStarredClicked) {
+            IconButton(
+                onClick = {
+                    cardViewModel.changeStar(idx)
+                }
+            ) {
                 Icon(imageVector = starImage, contentDescription = msg, tint = tint)
             }
-            IconButton(onClick = onEditClicked) {
+            IconButton(onClick = {
+                onEditClicked()
+                cardViewModel.updateIdx(idx = idx)
+            }) {
                 Icon(imageVector = Icons.Filled.Edit, contentDescription = stringResource(id = R.string.edit))
             }
-            IconButton(onClick = onDeleteClicked) {
+            IconButton(
+                onClick = {
+                    cardViewModel.removeListByIdx(idx)
+                }
+            ) {
                 Icon(imageVector = Icons.Filled.Delete, contentDescription = stringResource(id = R.string.delete))
             }
             IconButton(onClick = onShareClicked) {
@@ -115,11 +131,10 @@ fun ListPreview () {
     ListShort(
         name = "skylawson",
         photoId = R.drawable.profile_photo_1,
-        listName = "Hello",
-        isStarred = true,
+        cardList = CardList(),
         onCardClicked = { /*TODO*/ },
         onEditClicked = { /*TODO*/ },
-        onDeleteClicked = { /*TODO*/ },
-        onStarredClicked = { /*TODO*/ },
-        onShareClicked = { /*TODO*/ })
+        onShareClicked = { /*TODO*/ },
+        idx = 0,
+        cardViewModel = viewModel())
 }

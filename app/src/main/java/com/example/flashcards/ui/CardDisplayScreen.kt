@@ -1,6 +1,5 @@
 package com.example.flashcards.ui
 
-import android.widget.Space
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -35,14 +34,12 @@ import com.example.flashcards.ui.components.FlipCard
 @Composable
 fun CardDisplayScreen(
     cardList: CardList,
-    onEditClicked: () -> Unit,
     modifier: Modifier = Modifier,
     onOptionClicked: () -> Unit,
-    cardViewModel: CardViewModel = viewModel()
+    cardViewModel: CardViewModel
 ) {
     var idx by remember { mutableStateOf(0) }
     val n = cardList.words.size
-    val cardUiState by cardViewModel.uiState.collectAsState()
     Box(
         modifier = modifier.fillMaxSize()
     ) {
@@ -72,7 +69,7 @@ fun CardDisplayScreen(
                     color = Color.Blue
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                IconButton(onClick = { onOptionClicked }) {
+                IconButton(onClick = onOptionClicked) {
                     Icon(imageVector = Icons.Filled.MoreVert, contentDescription = stringResource(id = R.string.option))
                 }
             }
@@ -123,8 +120,8 @@ fun CardDisplayScreen(
                         .verticalScroll(rememberScrollState())
                         .weight(weight = 1f, fill = false)
                 ) {
-                    for (card in cardList.words) {
-                        CardShort(flashCard = card, onEditClicked = onEditClicked)
+                    for ((idex, item) in cardList.words.withIndex()) {
+                        CardShort(flashCard = item, cardViewModel = cardViewModel, idx = idex)
                         Spacer(Modifier.height(10.dp))
                     }
                 }
@@ -147,7 +144,7 @@ fun CardDisplayPreview() {
         words = cards
     )
     CardDisplayScreen(cardList = cardList,
-        onEditClicked = { /*TODO*/ },
-        onOptionClicked = { }
+        onOptionClicked = { },
+        cardViewModel = viewModel()
     )
 }

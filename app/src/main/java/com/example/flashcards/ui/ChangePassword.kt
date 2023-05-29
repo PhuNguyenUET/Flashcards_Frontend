@@ -30,14 +30,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.flashcards.R
-import com.example.flashcards.ui.components.InfoField
 import com.example.flashcards.ui.components.PassField
 
 @Composable
 fun ChangePassword (
     onChangeClicked: () -> Unit,
     modifier: Modifier = Modifier,
-    cardViewModel: CardViewModel = viewModel()
+    cardViewModel: CardViewModel
 ) {
     val cardUiState by cardViewModel.uiState.collectAsState()
     val focusManager = LocalFocusManager.current
@@ -63,7 +62,8 @@ fun ChangePassword (
         }
     }
     val nextAction: () -> Unit = if (check && checkEmpty) {
-        onChangeClicked
+        { onChangeClicked()
+        cardViewModel.setPassword(password = currentNewPassword) }
     } else {
         {}
     }
@@ -189,5 +189,5 @@ fun ChangePassword (
 @Preview(showBackground = true)
 @Composable
 fun ChangePasswordPreview () {
-    ChangePassword(onChangeClicked = { /*TODO*/ })
+    ChangePassword(onChangeClicked = { /*TODO*/ }, cardViewModel = viewModel())
 }
