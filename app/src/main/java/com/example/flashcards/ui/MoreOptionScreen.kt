@@ -10,9 +10,12 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,6 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.flashcards.R
 
 @Composable
@@ -61,7 +65,9 @@ fun MoreOptionScreen (
     onDeleteClicked: () -> Unit,
     onCancelClicked: () -> Unit,
     modifier: Modifier = Modifier,
+    cardViewModel: CardViewModel
 ) {
+    val uiState by cardViewModel.uiState.collectAsState()
     Box (
         modifier = modifier.fillMaxSize()
     ) {
@@ -88,8 +94,11 @@ fun MoreOptionScreen (
                 textId = R.string.share
             )
             CommonRow(
-                onButtonCLicked = onDeleteClicked,
-                icon = Icons.Filled.Share,
+                onButtonCLicked = {
+                    cardViewModel.removeListByIdx(uiState.idx)
+                    onDeleteClicked()
+                                  },
+                icon = Icons.Filled.Delete,
                 desId = R.string.delete,
                 textId = R.string.delete_list
             )
@@ -117,5 +126,7 @@ fun MoreOptionPreview () {
         onEditClicked = { /*TODO*/ },
         onShareClicked = { /*TODO*/ },
         onDeleteClicked = { /*TODO*/ },
-        onCancelClicked = { /*TODO*/ })
+        onCancelClicked = { /*TODO*/ },
+        cardViewModel = viewModel()
+    )
 }

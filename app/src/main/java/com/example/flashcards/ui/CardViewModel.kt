@@ -26,6 +26,18 @@ class CardViewModel : ViewModel() {
         }
     }
 
+    fun changeNew () {
+        _uiState.update { currentState ->
+            currentState.copy(createNew = true)
+        }
+    }
+
+    fun changeOld () {
+        _uiState.update { currentState ->
+            currentState.copy(createNew = false)
+        }
+    }
+
     fun changeList (idx: Int, words: List<FlashCard>, title: String, description: String) {
         var tempList: MutableList<CardList> = _uiState.value.lists
         val newList = CardList(words = words, description = description, title = title, photoId = tempList[idx].photoId)
@@ -92,7 +104,10 @@ class CardViewModel : ViewModel() {
     }
 
     fun addList (cardList: CardList) {
-        var tempList: MutableList<CardList> = _uiState.value.lists
+        var tempList: MutableList<CardList> = mutableListOf()
+        for (item in uiState.value.lists) {
+            tempList.add(item)
+        }
         tempList.add(cardList)
         _uiState.update { currentState ->
             currentState.copy(
@@ -111,8 +126,23 @@ class CardViewModel : ViewModel() {
         }
     }
 
+    fun forceRecompose () {
+        var tempList: MutableList<CardList> = mutableListOf()
+        for (item in uiState.value.lists) {
+            tempList.add(item)
+        }
+        _uiState.update { currentState ->
+            currentState.copy(
+                lists = tempList
+            )
+        }
+    }
+
     fun removeListByIdx (idx: Int) {
-        var tempList: MutableList<CardList> = _uiState.value.lists
+        var tempList: MutableList<CardList> = mutableListOf()
+        for (item in uiState.value.lists) {
+            tempList.add(item)
+        }
         tempList.removeAt(idx)
         _uiState.update { currentState ->
             currentState.copy(

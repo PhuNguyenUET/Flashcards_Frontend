@@ -119,9 +119,11 @@ fun Home (
                     listName = item.title,
                     onCardClicked = onCardClicked,
                     onAddClicked = {
-                        cardViewModel.addList(item)
+                        var tmp = item.copy()
+                        cardViewModel.addList(tmp)
                                    },
-                    onShareClicked = onShareClicked
+                    onShareClicked = onShareClicked,
+                    cardViewModel = cardViewModel
                 )
             }
         }

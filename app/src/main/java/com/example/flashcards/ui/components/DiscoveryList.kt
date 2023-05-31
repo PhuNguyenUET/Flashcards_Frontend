@@ -12,6 +12,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CopyAll
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,7 +27,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.flashcards.R
+import com.example.flashcards.ui.CardViewModel
 
 @Composable
 fun DiscoveryListShort (
@@ -35,8 +39,10 @@ fun DiscoveryListShort (
     onCardClicked: () -> Unit,
     onShareClicked: () -> Unit,
     onAddClicked: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    cardViewModel: CardViewModel
 ) {
+    val uiState by cardViewModel.uiState.collectAsState()
     Row (
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
@@ -73,7 +79,9 @@ fun DiscoveryListShort (
             verticalAlignment = Alignment.CenterVertically,
             //horizontalArrangement = Arrangement.End
             ) {
-            IconButton(onClick = onAddClicked) {
+            IconButton(onClick = {
+                onAddClicked()
+            }) {
                 Icon(
                     imageVector = Icons.Filled.CopyAll,
                     contentDescription = stringResource(id = R.string.add)
@@ -98,5 +106,6 @@ fun DiscoveryListPreview () {
         listName = "Test",
         onCardClicked = { /*TODO*/ },
         onShareClicked = { },
-        onAddClicked = { /*TODO*/ })
+        onAddClicked = { /*TODO*/ },
+        cardViewModel = viewModel())
 }

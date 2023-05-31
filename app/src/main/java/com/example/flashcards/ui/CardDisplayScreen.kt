@@ -38,7 +38,9 @@ fun CardDisplayScreen(
     onOptionClicked: () -> Unit,
     cardViewModel: CardViewModel
 ) {
+    val cardUiState by cardViewModel.uiState.collectAsState()
     var idx by remember { mutableStateOf(0) }
+    var words: MutableList<FlashCard> by remember { mutableStateOf(cardUiState.lists[cardUiState.idx].words) }
     val n = cardList.words.size
     Box(
         modifier = modifier.fillMaxSize()
@@ -49,12 +51,9 @@ fun CardDisplayScreen(
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
         )
-
-        Spacer(modifier = Modifier.width(15.dp))
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            Spacer(modifier = Modifier.height(30.dp))
             Row (
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -81,14 +80,26 @@ fun CardDisplayScreen(
             ) {
                 IconButton(
                     onClick = { idx -= 1 },
-                    enabled = (idx != 0),
+                    enabled = if (cardList.words.size != 0) {
+                        (idx != 0)
+                    } else {
+                        false
+                    }
                 ) {
                     Icon(imageVector = Icons.Filled.ArrowLeft, contentDescription = null)
                 }
-                FlipCard(flashCard = cardList.words[idx])
+                if (cardList.words.size != 0) {
+                    FlipCard(flashCard = cardList.words[idx])
+                } else {
+                    FlipCard(flashCard = FlashCard())
+                }
                 IconButton(
                     onClick = { idx += 1 },
-                    enabled = (idx != n - 1),
+                    enabled = if (cardList.words.size != 0) {
+                        idx != n - 1
+                    } else {
+                        false
+                    }
                 ) {
                     Icon(imageVector = Icons.Filled.ArrowRight, contentDescription = null)
                 }
@@ -120,8 +131,21 @@ fun CardDisplayScreen(
                         .verticalScroll(rememberScrollState())
                         .weight(weight = 1f, fill = false)
                 ) {
-                    for ((idex, item) in cardList.words.withIndex()) {
-                        CardShort(flashCard = item, cardViewModel = cardViewModel, idx = idex)
+                    for ((index, item) in words.withIndex()) {
+                        CardShort(
+                            flashCard = item,
+                            cardViewModel = cardViewModel,
+                            idx = index,
+                            onDelete = {
+                                val tmp: MutableList<FlashCard> = mutableListOf()
+                                for (items in words) {
+                                    tmp.add(items)
+                                }
+                                tmp.removeAt(index)
+                                words = tmp
+                                cardUiState.lists[cardUiState.idx].removeAtIdx(index)
+                            }
+                        )
                         Spacer(Modifier.height(10.dp))
                     }
                 }

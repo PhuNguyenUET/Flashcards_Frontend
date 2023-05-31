@@ -32,6 +32,7 @@ import com.example.flashcards.ui.CardViewModel
 fun CardShort (
     flashCard: FlashCard,
     idx: Int,
+    onDelete: () -> Unit,
     modifier: Modifier = Modifier,
     cardViewModel: CardViewModel
 ) {
@@ -82,9 +83,7 @@ fun CardShort (
         }) {
             Icon(imageVector = starImage, contentDescription = msg, tint = tint)
         }
-        IconButton(onClick = {
-            cardUiState.lists[cardUiState.idx].removeAtIdx(idx)
-        }) {
+        IconButton(onClick = onDelete) {
             Icon(imageVector = Icons.Filled.Delete, contentDescription = stringResource(id = R.string.edit))
         }
     }
@@ -96,6 +95,7 @@ fun CardShortPreview () {
     val card = FlashCard(word = "test", definition = "Ảo ma canada mafia Argentina Malaysia California Australia Austria Venezuela Romania Lazada Sri Lanka Sakura Haibara Edogawa Conan Naruto Nami Roronoa Zoro Sạnji Kaido Shanks nhảy lambada chachacha Chaien đấm Nobita và làm Shizuka nhòe đi Mascara khi nghe Vascara.")
     CardShort(
         flashCard = card,
+        onDelete = {},
         cardViewModel = viewModel(),
         idx = 0
     )

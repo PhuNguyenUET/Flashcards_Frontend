@@ -42,9 +42,7 @@ fun YourListScreen (
     val cardUiState by cardViewModel.uiState.collectAsState()
     val onAdd = {
         onAddMoreClicked()
-        val list = CardList()
-        cardViewModel.addList(list)
-        cardViewModel.updateIdx(cardLists.size - 1)
+        cardViewModel.changeNew()
     }
     Box (
         contentAlignment = Alignment.TopCenter,
@@ -64,7 +62,7 @@ fun YourListScreen (
         ) {
             Spacer(modifier = Modifier.height(20.dp))
             Text(
-                text = stringResource(id = R.string.recent),
+                text = stringResource(id = R.string.your_lists),
                 style = TextStyle(
                     fontStyle = FontStyle.Italic,
                     fontWeight = FontWeight.Bold,

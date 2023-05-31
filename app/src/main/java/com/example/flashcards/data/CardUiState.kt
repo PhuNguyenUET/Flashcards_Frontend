@@ -14,5 +14,6 @@ data class CardUiState (
     val numOfCardsInList: List<Int> = mutableListOf(),
     val correctLogIn: Boolean = true,
     val lists: MutableList<CardList> = mutableListOf(),
+    val createNew: Boolean = false,
     val idx: Int = 0
 )

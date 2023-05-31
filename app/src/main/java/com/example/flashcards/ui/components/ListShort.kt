@@ -53,8 +53,8 @@ fun ListShort (
         Row(
             modifier = Modifier.clickable(
                 onClick = {
-                    onCardClicked()
                     cardViewModel.updateIdx(idx = idx)
+                    onCardClicked()
                 }
             ),
             verticalAlignment = Alignment.CenterVertically,
@@ -106,8 +106,8 @@ fun ListShort (
                 Icon(imageVector = starImage, contentDescription = msg, tint = tint)
             }
             IconButton(onClick = {
-                onEditClicked()
                 cardViewModel.updateIdx(idx = idx)
+                onEditClicked()
             }) {
                 Icon(imageVector = Icons.Filled.Edit, contentDescription = stringResource(id = R.string.edit))
             }

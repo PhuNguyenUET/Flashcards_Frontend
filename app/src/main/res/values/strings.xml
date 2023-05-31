@@ -65,4 +65,5 @@
     <string name="password_not_match">Your old password does not match</string>
     <string name="confirm_not_match">Your password confirm does not match</string>
     <string name="pass_not_empty">New password cannot be empty</string>
+    <string name="home">Home</string>
 </resources>

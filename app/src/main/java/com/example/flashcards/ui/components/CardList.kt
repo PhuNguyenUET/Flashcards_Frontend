@@ -30,11 +30,15 @@ class CardList () {
     }
 
     fun copy(): CardList {
+        var tempWords: MutableList<FlashCard> = mutableListOf()
+        for (item in words) {
+            tempWords.add(item)
+        }
         return CardList(
             title = this.title,
             description = this.description,
             photoId = this.photoId,
-            words = this.words
+            words = tempWords
         )
     }
 

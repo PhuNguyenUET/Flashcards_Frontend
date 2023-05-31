@@ -32,7 +32,8 @@ fun TopAppBar (
     modifier: Modifier = Modifier
 ) {
     Row (
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
             .background(color = Color(189, 145, 189, 255)),
         verticalAlignment = Alignment.CenterVertically
     ){
@@ -64,7 +65,7 @@ fun TopAppBar (
         }
         Spacer(modifier = Modifier.width(8.dp))
         IconButton(
-            onClick = onAddClicked,
+            onClick = {},
             modifier = Modifier.border(BorderStroke(1.dp, Color.LightGray), shape = RoundedCornerShape(50.dp))
         )  {
             Icon(imageVector = Icons.Filled.Notifications, contentDescription = stringResource(id = R.string.add))
@@ -73,7 +74,8 @@ fun TopAppBar (
             painter = painterResource(id = profileId),
             contentDescription = stringResource(id = R.string.expand),
             contentScale = ContentScale.Crop,
-            modifier = Modifier.clickable(onClick = onProfileClicked)
+            modifier = Modifier
+                .clickable(onClick = onProfileClicked)
                 .size(64.dp)
                 .padding(8.dp)
                 .clip(RoundedCornerShape(50.dp))

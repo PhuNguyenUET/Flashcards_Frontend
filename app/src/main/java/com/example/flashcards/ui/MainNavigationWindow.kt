@@ -7,10 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Book
-import androidx.compose.material.icons.filled.Logout
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,6 +30,7 @@ fun MainNavigationScreen (
     onSettingsClicked: () -> Unit,
     onLogoutClicked: () -> Unit,
     onCancelClicked: () -> Unit,
+    onHomeClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box (
@@ -48,6 +46,10 @@ fun MainNavigationScreen (
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Bottom
         ) {
+            CommonRow(onButtonCLicked = onHomeClicked,
+                icon = Icons.Filled.Home,
+                desId = R.string.home,
+                textId = R.string.home)
             CommonRow(
                 onButtonCLicked = onYourListClicked,
                 icon = Icons.Filled.Book,
@@ -98,5 +100,6 @@ fun MainNavigationPreview () {
         onSettingsClicked = { /*TODO*/ },
         onLogoutClicked = { /*TODO*/ },
         onCancelClicked = { /*TODO*/ },
+        onHomeClicked = {}
     )
 }

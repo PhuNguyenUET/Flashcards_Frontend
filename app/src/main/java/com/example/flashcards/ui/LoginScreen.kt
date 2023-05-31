@@ -43,6 +43,7 @@ fun LoginScreen (
     modifier: Modifier = Modifier,
     cardViewModel: CardViewModel
 ) {
+    var login by remember { mutableStateOf(false) }
     val cardUiState by cardViewModel.uiState.collectAsState()
     val focusManager = LocalFocusManager.current
     var currentUsername by remember { mutableStateOf("") }

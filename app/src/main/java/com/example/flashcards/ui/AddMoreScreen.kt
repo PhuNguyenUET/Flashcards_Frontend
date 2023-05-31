@@ -65,15 +65,19 @@ fun AddMoreScreen (
     modifier: Modifier = Modifier,
     cardViewModel: CardViewModel
 ) {
-    var tempList = cardList.words
-    var key by remember { mutableStateOf(0) }
+    val uiState by cardViewModel.uiState.collectAsState()
+    var tempList by remember { mutableStateOf(cardList.words) }
     var title by remember { mutableStateOf(cardList.title) }
     var description by remember { mutableStateOf(cardList.description) }
     val focusManager = LocalFocusManager.current
     val onAdd: () -> Unit = {
         val card = FlashCard()
-        tempList.add(card)
-        key ++
+        var tmp: MutableList<FlashCard> = mutableListOf()
+        for (item in tempList) {
+            tmp.add(item)
+        }
+        tmp.add(card)
+        tempList = tmp
     }
     Box(modifier = modifier.fillMaxSize()) {
         Image(
@@ -97,14 +101,23 @@ fun AddMoreScreen (
                 Text(
                     text = stringResource(id = R.string.done),
                     style = TextStyle(fontStyle = FontStyle.Italic, fontSize = 18.sp),
-                    modifier = Modifier.clickable {
-                        cardViewModel.changeList(
-                            words = tempList,
-                            idx = idx,
-                            title = title,
-                            description = description
-                        )
-                        onDoneClicked()
+                    modifier = if (!uiState.createNew) {
+                        Modifier.clickable {
+                            cardViewModel.changeList(
+                                words = tempList,
+                                idx = idx,
+                                title = title,
+                                description = description
+                            )
+                            onDoneClicked()
+                        }
+                    } else {
+                        Modifier.clickable {
+                            var tmpCardList = CardList(title = title, description = description, photoId = uiState.profilePicId, words = tempList)
+                            cardViewModel.addList(tmpCardList)
+                            cardViewModel.updateIdx(uiState.lists.size - 1)
+                            onDoneClicked()
+                        }
                     }
                 )
                 Spacer(modifier = Modifier.width(4.dp))
@@ -157,7 +170,7 @@ fun AddMoreScreen (
                     .weight(weight = 1f, fill = false)
             ) {
                 for (card in tempList) {
-                    CardBox(card = card, onTermChange = {card.word = it; key --}, onDefChange = { card.definition = it; key ++})
+                    CardBox(card = card)
                     Spacer(modifier = Modifier.height(10.dp))
                 }
                 Button(onClick = onAdd) {
@@ -181,10 +194,10 @@ fun AddMoreScreen (
 @Composable
 fun CardBox (
     card: FlashCard,
-    onTermChange: (String) -> Unit,
-    onDefChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var word by remember { mutableStateOf(card.word) }
+    var definition by remember { mutableStateOf(card.definition) }
     val focusManager = LocalFocusManager.current
     Card (
         modifier = modifier
@@ -196,8 +209,8 @@ fun CardBox (
         ) {
             CommonTextField(
                 labelId = R.string.term,
-                onValueChange = onTermChange,
-                value = card.word,
+                onValueChange = { word = it; card.word = word },
+                value = word,
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Next
@@ -209,8 +222,8 @@ fun CardBox (
             Spacer(modifier = Modifier.height(5.dp))
             CommonTextField(
                 labelId = R.string.definition,
-                onValueChange = onDefChange,
-                value = card.definition,
+                onValueChange = { definition = it; card.definition = definition },
+                value = definition,
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Done
